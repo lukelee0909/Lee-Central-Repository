@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE configuration   
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<!--
+	1.配置数据源的环境
+	2.加载保存映射信息的配置文件
+	3.命名（全局的）变量名，例如下面用到的实体类的别名
+-->
+
+	<typeAliases>
+		<!--给实体类起一个别名 user，这个别名会在UserMapper.xml中使用 -->
+		<typeAlias type="org.lee.mybatis.bean.User" alias="User" />
+	</typeAliases>
+	<!--数据源配置  使用mysql数据库 -->
+	<environments default="development">
+		<environment id="development">
+			<!-- 使用JDBC事务管理，事务控制由mybatis来完成 -->
+			<transactionManager type="JDBC" />
+			<!-- 数据库连接池 -->
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://localhost:3306/test" />
+				<property name="username" value="root" />
+				<property name="password" value="root" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!--userMapper.xml装载进来  同等于把“dao”的实现装载进来 -->
+		<mapper resource="mappers/UserMapper.xml" />
+	</mappers>
+</configuration> 

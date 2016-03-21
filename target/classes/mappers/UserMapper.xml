@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 在映射文件中配置SQL语句 -->
+<!-- mybatis框架会根据这个配置文件，通过代理的方式实现Mapper接口，以便于用户（程序员）对接口进行调用 -->
+
+<!--这块等于dao接口的实现  namespace必须和接口的类路径一样-->
+<!-- mapper标签的每个子标签都相当于定义了一个prepareStatement -->
+<mapper namespace="org.lee.mybatis.dao.UserMapper">
+	<!-- findByName和 insertUser必须和接口中的方法名一样 ，返回一个User，就是刚才的别名 。如果不弄别名要连类路径一起写，麻烦-->
+	<!--
+		id：与namespace对应的接口中的方法名一致
+		parameterType：与namespace里面相应方法的传入参数的类型一致，或者是相应的POJO中属性的类型
+			【例如，本例中，parameterType既可以是User，也可以是java.lang.String】
+		resultType：与namespace里面相应方法的返回值的类型一致
+		#{}：表示一个占位符。
+		#{name}：其中的name表示接收输入的参数，参数名就是name。
+	-->
+	<select id="findByName" parameterType="User" resultType="User">
+		select * from user where name = #{name}
+    </select>
+    
+    <insert id="insertUser" parameterType="User">
+    	<!--
+    		执行完inert语句之后，返回一个查询结果到User对象（就是在insert标签中的parameterType的那个参数对象）中
+    		keyProperty：将查询到的主键设置到parameterType指定的对象的那个属性，本例指的就是User对象的id属性
+    		order：指的是相对于insert语句，SELECT LAST_INSERT_ID()的执行顺序
+    		resultType：指的是keyProperty中设置的属性对应类型
+    	-->
+    	<selectKey keyProperty="uuid" order="BEFORE" resultType="java.lang.String">
+    		SELECT name from user where id = 1
+    	</selectKey>
+    	insert into user(name, age, uuid) value(
+    		#{ name, jdbcType=VARCHAR},
+    		#{ age, jdbcType=INTEGER},
+    		#{ uuid, jdbcType=VARCHAR}
+    	)
+    </insert>
+    
+    <update id="updateUser" parameterType="User">
+    	<selectKey keyProperty="age" order="AFTER" resultType="java.lang.Integer">
+    		SELECT age from user where name = #{name}
+    	</selectKey>
+    	UPDATE USER SET age = age + 1, uuid = #{uuid} WHERE NAME = #{name}
+    </update>
+</mapper>

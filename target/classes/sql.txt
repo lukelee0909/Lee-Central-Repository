@@ -1,0 +1,11 @@
+create database mybatis
+drop table user;
+create table user
+(
+	id int(11),
+	name varchar(255),
+	age  int(11),
+	uuid varchar(40)
+);
+
+insert into user value (1,'xl',22,'213456787654');

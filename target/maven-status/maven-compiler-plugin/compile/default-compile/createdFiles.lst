@@ -1,0 +1,3 @@
+org\lee\mybatis\first\MybatisFirst.class
+org\lee\mybatis\dao\UserMapper.class
+org\lee\mybatis\bean\User.class
